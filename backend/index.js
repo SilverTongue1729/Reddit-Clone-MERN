@@ -1,24 +1,22 @@
 import express from 'express';
 
+import connectDB from './utils/connectDB.js';
+
+import userRoutes from './routes/user.js';
+
 const app = express();
 app.use(express.json());
 
-const PORT = process.env.PORT || 8000;
+connectDB();
+
+app.use('/api/user', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-app.post('/', (req, res) => {
-  res.send('This is a post request');
-});
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 });
-
-//m
-
-/*
-mongodb+srv://admin:<password>@cluster0.ludgzni.mongodb.net/?retryWrites=true&w=majority
-*/
