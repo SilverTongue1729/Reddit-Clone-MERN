@@ -19,6 +19,8 @@ import { orangered } from '@mui/material/colors';
 
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import api from '../../api/api';
+import axios from 'axios';
 
 const theme = createTheme();
 
@@ -26,39 +28,35 @@ export default function Login () {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [values, setValues] = useState({
-    username: '',
+  const [formData, setFormData] = useState({
+    userName: '',
     password: '',
   });
 
-  const handleChange = (field) => (event) => {
-    setValues({
-      ...values,
-      [field]: event.target.value,
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
     });
   };
 
-  const allFieldsHaveValue = Object.values(values).every(Boolean);
+  const allFieldsHaveValue = Object.values(formData).every(Boolean);
 
-  const onLoginSuccess = () => {
-    const redirect = location.state?.from.pathname || '/profile';
-    navigate(redirect);
-  }
-
-
-  useEffect(() => {
-    if (localStorage.getItem('isAuthenticated')) {
-      onLoginSuccess();
-    }
-  }, []);
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (data.get('username') === 'admin' && data.get('password') === 'admin') {
-      // console.log('Login Successful');
-      localStorage.setItem('isAuthenticated', true);
-      onLoginSuccess();
+    try {
+      // console.log("formData", formData);
+      const response = await api.post("/api/auth/login", formData);
+
+      localStorage.setItem("authToken", response.data.token);
+      localStorage.setItem("isAuthenticated", "true");
+      axios.defaults.headers.common['x-auth-token'] = response.data.token;
+      // console.log("authToken", response.data.token);
+      
+      const redirect = location.state?.from.pathname || '/';
+      navigate(redirect);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -80,25 +78,25 @@ export default function Login () {
               margin="normal"
               required
               fullWidth
-              value={values.username}
-              onChange={handleChange('username')}
-              id="username"
+              id="userName"
               label="Username"
-              name="username"
-              autoComplete="username"
+              name="userName"
+              autoComplete="userName"
               autoFocus
+              value={formData.userName}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              value={values.password}
-              onChange={handleChange('password')}
-              name="password"
-              label="Password"
-              type="password"
               id="password"
+              label="Password"
+              name="password"
               autoComplete="current-password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
             />
             <Button
               type="submit"

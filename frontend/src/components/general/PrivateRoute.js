@@ -7,9 +7,14 @@ export default function PrivateRoute ({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!localStorage.getItem('isAuthenticated'))
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    
+    if (!isAuthenticated) {
       navigate('/loginsignup', { state: { from: location } });
-    else setLoading(false);
+    }    
+    else {
+      setLoading(false);
+    }
   }, []);
 
   if (loading) return <h1>Loading</h1>;

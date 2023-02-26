@@ -17,10 +17,10 @@ form.render(
     <BrowserRouter>
       <Routes>
         <Route path="/loginsignup" element={<LoginSignup />} />
-        <Route path="" element={<PrivateRoute><Dashboard /></PrivateRoute>}>
-          <Route path="profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-          <Route path="followers" element={<PrivateRoute><Followers /></PrivateRoute>} />
-          <Route path="following" element={<PrivateRoute><Following /></PrivateRoute>} />
+        <Route path="" element={<Dashboard />}>
+          <Route path="profile" element={<Profile />} />
+          {/* <Route path="followers" element={<Followers />} />
+          <Route path="following" element={<Following />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

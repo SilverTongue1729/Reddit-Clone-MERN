@@ -14,25 +14,42 @@ const userSchema = new Schema({
   password: { type: String, required: true },
 
   savedPosts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
-  followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  followers: [{
+    userid: {type: Schema.Types.ObjectId, ref: 'User'},
+    userName: { type: String, required: true}
+  }],
+  following: [{
+    userid: { type: Schema.Types.ObjectId, ref: 'User' },
+    userName: { type: String, required: true }
+  }],
   subgreddiits: [{
     status: { type: String, enum: ['joined', 'blocked', 'requested'], default: 'requested' },
     subgreddiitId: { type: Schema.Types.ObjectId, ref: 'Subgreddiit' },
     date: { type: Date }
   }],
+}, {
+  methods: {
+    checkPassword (password) {
+      return bcrypt.compare(password, this.password);
+    },
+    genToken () {
+      return jwt.sign({ user: { id: this._id } }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE,
+      });
+    }
+  }
 });
 
-userSchema.methods.checkPassword = function (password) {
-  return bcrypt.compare(password, this.password);
-};
 
-userSchema.methods.genToken = function () {
-  return jwt.sign({ user: { id: this._id } }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
-};
+// userSchema.methods.checkPassword = function (password) {
+//   return bcrypt.compare(password, this.password);
+// };
 
+// userSchema.methods.genToken = function () {
+//   return jwt.sign({ user: { id: this._id } }, process.env.JWT_SECRET, {
+//     expiresIn: process.env.JWT_EXPIRE,
+//   });
+// };
 
 const User = mongoose.model("User", userSchema);
 

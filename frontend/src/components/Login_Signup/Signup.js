@@ -16,7 +16,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import { orangered } from '@mui/material/colors';
 
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import api from '../../api/api';
+import axios from 'axios';
+
 
 const theme = createTheme();
 
@@ -30,16 +34,46 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Signup () {
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
+  // const location = useLocation();
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    userName: "",
+    age: "",
+    contactNo: "",
+    password: "",
+  });
+
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
+  
+  const allFieldsHaveValue = Object.values(formData).every(Boolean);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // console.log({
-    //   username: data.get('username'),
-    //   password: data.get('password'),
-    // });
-    console.log('Signup Successful');
-    localStorage.setItem('isAuthenticated', true);
-    navigate('/');
+
+    try {
+      console.log("formData", formData);
+      const response = await api.post("/api/auth/signup", formData);
+
+      localStorage.setItem("authToken", response.data.token);
+      localStorage.setItem("isAuthenticated", "true");
+      console.log("authToken", response.data.token);
+      axios.defaults.headers.common['x-auth-token'] = response.data.token;
+
+      // const redirect = location.state?.from.pathname || '/';
+      // navigate(redirect);
+      navigate("/");
+      
+    } catch (err) {
+      console.error(err);
+      console.log("err", err.message)
+    }
   };
 
   return (
@@ -59,21 +93,25 @@ export default function Signup () {
               margin="normal"
               required
               fullWidth
-              id="firstname"
+              id="firstName"
               label="First Name"
-              name="firstname"
+              name="firstName"
               autoComplete="given-name"
               autoFocus
+              value={formData.firstName}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              id="lastname"
+              id="lastName"
               label="Last Name"
-              name="lastname"
+              name="lastName"
               autoComplete="family-name"
               autoFocus
+              value={formData.lastName}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
@@ -84,6 +122,8 @@ export default function Signup () {
               name="email"
               autoComplete="email"
               autoFocus
+              value={formData.email}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
@@ -91,29 +131,35 @@ export default function Signup () {
               fullWidth
               name="age"
               label="Age"
-              type="age"
+              type="number"
               id="age"
               autoComplete="age"
+              value={formData.age}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="mobile"
+              name="contactNo"
               label="Mobile No."
-              type="mobile"
-              id="mobile"
-              autoComplete="mobile"
+              type="tel"
+              id="contactNo"
+              autoComplete="tel"
+              value={formData.contactNo}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              id="username"
+              id="userName"
               label="Username"
-              name="username"
+              name="userName"
               autoComplete="username"
               autoFocus
+              value={formData.userName}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
@@ -124,12 +170,15 @@ export default function Signup () {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={formData.password}
+              onChange={handleChange}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2, color: 'white', bgcolor: 'orangered', '&:hover': { bgcolor: 'orangered' } }}
+              disabled={!allFieldsHaveValue}
             >
               Submit
             </Button>

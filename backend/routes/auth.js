@@ -60,7 +60,7 @@ router.post('/signup', [
  */
 router.post('/login', [
   body('userName').not().isEmpty().withMessage('User name is required').trim().escape(),
-  body('password').isLength({ min: 1 }).withMessage('Password is required')
+  body('password').isLength({ min: 1 }).withMessage('Password is required').escape()
 ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -75,6 +75,7 @@ router.post('/login', [
       if (!user) {
         return res.status(400).json({ message: "User not found" });
       }
+      
       const isMatch = await user.checkPassword(password);
       if (!isMatch) {
         return res.status(401).json({ message: "Invalid credentials" });

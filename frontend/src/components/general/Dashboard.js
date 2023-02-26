@@ -21,16 +21,26 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import RedditIcon from '@mui/icons-material/Reddit';
+import FolderSharedIcon from '@mui/icons-material/FolderShared';
+import FolderSharedOutlinedIcon from '@mui/icons-material/FolderSharedOutlined';
+import FolderSharedTwoToneIcon from '@mui/icons-material/FolderSharedTwoTone';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 // import { mainListItems } from './listItems';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 
 import { Routes, Route, Outlet, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // import Profile from './Profile';
 import Greddiit_Logo from '../../images/Greddiit_Logo_1.jpg';
 import Profile from '../Profile/Profile';
+import PrivateRoute from './PrivateRoute';
+import Reddit from '@mui/icons-material/Reddit';
 
 const drawerWidth = 240;
 
@@ -80,13 +90,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-// export setEdit;
-// function NavigateToString (){
-//   console.log('string', 'profile');
-//   const navigate = useNavigate();
-//   navigate('/profile');
-// }
-
 function DashboardContent () {
   const [open, setOpen] = React.useState(true);
   const navigate = useNavigate();
@@ -96,106 +99,132 @@ function DashboardContent () {
   };
 
   const NavigateToProfile = () => {
-    console.log('navigate to profile');
     navigate('/profile');
   }
-  
+
   const Logout = () => {
     console.log('logout');
+    localStorage.removeItem('authToken');
     localStorage.removeItem('isAuthenticated');
+    delete axios.defaults.headers.common['x-auth-token'];
     navigate('/loginsignup');
   }
 
   return (
-    <main>
-      <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <AppBar position="absolute" open={open} >
-            <Toolbar
-              sx={{
-                pr: '24px', // keep right padding when drawer closed
-                bgcolor: 'orangered',
-                // bgColor: 'red',
-              }}
-            >
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                onClick={toggleDrawer}
+    <PrivateRoute>
+      <main>
+        <ThemeProvider theme={mdTheme}>
+          <Box sx={{ display: 'flex', p: '10' }}>
+            <CssBaseline />
+            <AppBar position="absolute" open={open} >
+              <Toolbar
                 sx={{
-                  marginRight: '36px',
-                  ...(open && { display: 'none' }),
+                  pr: '24px', // keep right padding when drawer closed
+                  bgcolor: 'orangered',
+                  // pd: '10px',
+                  // bgColor: 'red',
                 }}
               >
-                <MenuIcon />
-              </IconButton>
-              <img src={Greddiit_Logo} alt="Greddiit Logo" height={35} width={35} />
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1 }}
-              > Greddiit
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <Drawer variant="permanent" open={open}>
-            <Toolbar
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={toggleDrawer}
+                  sx={{
+                    marginRight: '36px',
+                    ...(open && { display: 'none' }),
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <img src={Greddiit_Logo} alt="Greddiit Logo" height={35} width={35} />
+                <Typography
+                  component="h1"
+                  variant="h6"
+                  color="inherit"
+                  noWrap
+                  sx={{ flexGrow: 1 }}
+                > Greddiit
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <Drawer variant="permanent" open={open}>
+              <Toolbar
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  px: [1],
+                }}
+              >
+                <IconButton onClick={toggleDrawer}>
+                  <ChevronLeftIcon />
+                </IconButton>
+              </Toolbar>
+              <Divider />
+
+              <List component="nav">
+                {/* {mainListItems} */}
+                <ListItemButton onClick={NavigateToProfile}>
+                  <ListItemIcon>
+                    <PersonIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </ListItemButton>
+
+                <ListItemButton onClick={NavigateToProfile}>
+                  <ListItemIcon>
+                    <FolderSharedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="My SubGreddiits" />
+                </ListItemButton>
+
+                <ListItemButton onClick={NavigateToProfile}>
+                  <ListItemIcon>
+                    <RedditIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="SubGreddiits" />
+                </ListItemButton>
+
+                <ListItemButton onClick={NavigateToProfile}>
+                  <ListItemIcon>
+                    {/* <BookmarkIcon /> */}
+                    <BookmarkIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Saved Posts" />
+                </ListItemButton>
+
+                <ListItemButton onClick={Logout}>
+                  <ListItemIcon>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Log Out" />
+                </ListItemButton>
+                <Divider sx={{ my: 1 }} />
+              </List>
+
+            </Drawer>
+            <Box
+              component="main"
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                px: [1],
+                bgcolor: (theme) =>
+                  theme.palette.mode === 'light'
+                    ? theme.palette.grey[100]
+                    : theme.palette.grey[900],
+                flexGrow: 1,
+                height: '100vh',
+                overflow: 'auto',
               }}
             >
-              <IconButton onClick={toggleDrawer}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Toolbar>
-            <Divider />
+              <Toolbar />
+              <Container sx={{ mt: 6, mb: 4 }}>
+                <Grid container spacing={3} >
+                  <Outlet />
+                  {/* <Profile /> */}
 
-            <List component="nav">
-              {/* {mainListItems} */}
-              <ListItemButton onClick={NavigateToProfile}>
-                <ListItemIcon>
-                  <PersonIcon />
-                </ListItemIcon>
-                <ListItemText primary="Profile" />
-              </ListItemButton>
-              <ListItemButton onClick={Logout}>
-                <ListItemIcon>
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText primary="Log Out" />
-              </ListItemButton>
-              <Divider sx={{ my: 1 }} />
-            </List>
-
-          </Drawer>
-          <Box
-            component="main"
-            sx={{
-              bgcolor: (theme) =>
-                theme.palette.mode === 'light'
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
-              flexGrow: 1,
-              height: '100vh',
-              overflow: 'auto',
-            }}
-          >
-            <Toolbar />
-            <Container sx={{ mt: 4, mb: 4 }}>
-              <Grid container spacing={3}>
-                <Outlet />
-                {/* <Profile /> */}
-
-                {/* <Info_Edit /> */}
-                {/* Chart */}
-                {/* <Grid item xs={12} md={8} lg={9}>
+                  {/* <Info_Edit /> */}
+                  {/* Chart */}
+                  {/* <Grid item xs={12} md={8} lg={9}>
                 <Paper
                   sx={{
                     p: 2,
@@ -208,8 +237,8 @@ function DashboardContent () {
                 </Paper>
               </Grid> */}
 
-                {/* Recent Deposits */}
-                {/* <Grid item xs={12} md={4} lg={3}>
+                  {/* Recent Deposits */}
+                  {/* <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
                     p: 2,
@@ -222,18 +251,19 @@ function DashboardContent () {
                 </Paper>
               </Grid> */}
 
-                {/* Recent Orders */}
-                {/* <Grid item xs={12}>
+                  {/* Recent Orders */}
+                  {/* <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   <Orders />
                 </Paper>
               </Grid> */}
-              </Grid>
-            </Container>
+                </Grid>
+              </Container>
+            </Box>
           </Box>
-        </Box>
-      </ThemeProvider>
-    </main>
+        </ThemeProvider>
+      </main>
+    </PrivateRoute>
   );
 }
 
