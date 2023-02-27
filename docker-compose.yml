@@ -1,0 +1,23 @@
+services:
+  greddiit_frontend:
+    ports:
+      - '3000:3000'
+
+    build:
+      dockerfile: Dockerfile.reactUI
+      context: ./frontend
+
+    depends_on:
+      - greddiit_backend   
+
+
+  greddiit_backend: 
+    ports: 
+      - '8000:8000' 
+
+    build:
+      dockerfile: Dockerfile.node
+      context: ./backend
+      
+    env_file:
+      - ./backend/.env

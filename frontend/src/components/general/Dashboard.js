@@ -9,11 +9,8 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -22,18 +19,10 @@ import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import RedditIcon from '@mui/icons-material/Reddit';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
-import FolderSharedOutlinedIcon from '@mui/icons-material/FolderSharedOutlined';
-import FolderSharedTwoToneIcon from '@mui/icons-material/FolderSharedTwoTone';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-// import { mainListItems } from './listItems';
-import Button from '@mui/material/Button';
-import EditIcon from '@mui/icons-material/Edit';
 
-import { Routes, Route, Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 // import Profile from './Profile';
@@ -94,13 +83,12 @@ function DashboardContent () {
   const [open, setOpen] = React.useState(true);
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const isSubGreddiit = location.pathname.startsWith('/subgreddiit/');
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  const NavigateToProfile = () => {
-    navigate('/profile');
-  }
 
   const Logout = () => {
     console.log('logout');
@@ -165,34 +153,65 @@ function DashboardContent () {
 
               <List component="nav">
                 {/* {mainListItems} */}
-                <ListItemButton onClick={NavigateToProfile}>
+                {/* <ListItemButton onClick={NavigateToProfile}> */}
+                <ListItemButton onClick={() => navigate('/profile')}>
                   <ListItemIcon>
                     <PersonIcon />
                   </ListItemIcon>
                   <ListItemText primary="Profile" />
                 </ListItemButton>
 
-                <ListItemButton onClick={NavigateToProfile}>
+                <ListItemButton onClick={() => navigate('/mysubgreddiits')}>
                   <ListItemIcon>
                     <FolderSharedIcon />
                   </ListItemIcon>
                   <ListItemText primary="My SubGreddiits" />
                 </ListItemButton>
 
-                <ListItemButton onClick={NavigateToProfile}>
+                <ListItemButton onClick={() => navigate('/subgreddiits')}>
                   <ListItemIcon>
                     <RedditIcon />
                   </ListItemIcon>
                   <ListItemText primary="SubGreddiits" />
                 </ListItemButton>
 
-                <ListItemButton onClick={NavigateToProfile}>
+                <ListItemButton onClick={() => navigate('/savedposts')}>
                   <ListItemIcon>
-                    {/* <BookmarkIcon /> */}
                     <BookmarkIcon />
                   </ListItemIcon>
                   <ListItemText primary="Saved Posts" />
                 </ListItemButton>
+
+                {isSubGreddiit &&
+                  <ListItemButton onClick={() => (null)}>
+                    <ListItemIcon>
+                      <BookmarkIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Users" />
+                  </ListItemButton>
+                  &&
+                  <ListItemButton onClick={() => (null)}>
+                    <ListItemIcon>
+                      <BookmarkIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Joining Requests" />
+                  </ListItemButton>
+                  &&
+                  <ListItemButton onClick={() => (null)}>
+                    <ListItemIcon>
+                      <BookmarkIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Stats" />
+                  </ListItemButton>
+                  &&
+                  <ListItemButton onClick={() => (null)}>
+                    <ListItemIcon>
+                      <BookmarkIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Reported" />
+                  </ListItemButton>
+
+                }
 
                 <ListItemButton onClick={Logout}>
                   <ListItemIcon>
@@ -219,44 +238,9 @@ function DashboardContent () {
               <Toolbar />
               <Container sx={{ mt: 6, mb: 4 }}>
                 <Grid container spacing={3} >
+
                   <Outlet />
-                  {/* <Profile /> */}
 
-                  {/* <Info_Edit /> */}
-                  {/* Chart */}
-                  {/* <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid> */}
-
-                  {/* Recent Deposits */}
-                  {/* <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid> */}
-
-                  {/* Recent Orders */}
-                  {/* <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
-                </Paper>
-              </Grid> */}
                 </Grid>
               </Container>
             </Box>

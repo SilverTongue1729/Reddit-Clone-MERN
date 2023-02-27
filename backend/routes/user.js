@@ -1,13 +1,17 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
 import User from '../models/User.js';
 import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
+/**
+ * @route GET api/user
+ * @desc Get user
+ * @access Private
+ * @returns {user}
+ */
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -22,6 +26,12 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+/**
+ * @route POST api/user/edit
+ * @desc Edit user
+ * @access Private
+ * @returns {user}
+ */
 router.post('/edit', auth, [
   body('firstName').not().isEmpty().withMessage('First name is required').trim().escape(),
   body('lastName').not().isEmpty().withMessage('Last name is required').trim().escape(),

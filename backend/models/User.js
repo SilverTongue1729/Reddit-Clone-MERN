@@ -23,7 +23,7 @@ const userSchema = new Schema({
     userName: { type: String, required: true }
   }],
   subgreddiits: [{
-    status: { type: String, enum: ['joined', 'blocked', 'requested'], default: 'requested' },
+    status: { type: String, enum: ['joined', 'blocked', 'requested','moderator'], default: 'requested' },
     subgreddiitId: { type: Schema.Types.ObjectId, ref: 'Subgreddiit' },
     date: { type: Date }
   }],

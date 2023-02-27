@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import api from '../../api/api';
 
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import EditIcon from '@mui/icons-material/Edit';
 
 const Profile = () => {
   const [user, setUser] = useState({});

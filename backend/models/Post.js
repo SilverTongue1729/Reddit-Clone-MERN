@@ -11,9 +11,10 @@ const PostSchema = new Schema({
     enum: ['upvote', 'downvote']
   }],
   date: { type: Date, default: Date.now },
-  status: { type: String, enum: ['visible', 'deleted', 'reported_sometime'], required: true, default: 'visible' },
+  status: { type: String, enum: ['visible', 'reported_sometime'], required: true, default: 'visible' },
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-  savedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+  savedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  deleted: { type: Number, default: 0 },
 });
 
 const Post = mongoose.model('Post', PostSchema);
