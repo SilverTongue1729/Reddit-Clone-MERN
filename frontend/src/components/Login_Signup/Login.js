@@ -1,21 +1,10 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
-import FilledInput from '@mui/material/FilledInput';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { styled } from '@mui/material/styles';
-import { orangered } from '@mui/material/colors';
 
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -45,12 +34,13 @@ export default function Login () {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // console.log("formData", formData);
+      console.log("formData", formData);
       const response = await api.post("/api/auth/login", formData);
 
       localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("isAuthenticated", "true");
       axios.defaults.headers.common['x-auth-token'] = response.data.token;
+      api.defaults.headers.common['x-auth-token'] = response.data.token;
       // console.log("authToken", response.data.token);
       
       const redirect = location.state?.from.pathname || '/';

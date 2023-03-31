@@ -13,11 +13,19 @@ services:
 
   greddiit_backend: 
     ports: 
-      - '8000:8000' 
+      - '8000:8000'
 
     build:
       dockerfile: Dockerfile.node
       context: ./backend
       
-    env_file:
-      - ./backend/.env
+    # env_file:
+      # - ./backend/.env
+  db:
+    volumes:
+      - slack_db:/data/db
+    image: mongo:latest
+    ports:
+      - "27017:27017" 
+volumes:
+  slack_db:

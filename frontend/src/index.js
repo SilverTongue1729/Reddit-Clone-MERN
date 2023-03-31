@@ -4,12 +4,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
 import './index.css';
-import Dashboard from './components/general/Dashboard';
+import Dashboard from './components/utils/Dashboard';
 import LoginSignup from './components/Login_Signup/Login_Signup';
-import Profile from './components/Profile/Profile';
-import MySubgreddiits from './components/MySubgreddiits/MySubgreddiits';
-import Subgreddiits from './components/Subgreddiits/Subgreddiits';
-import Subgreddiit from './components/Subgreddiit/Subgreddiit';
+import Profile from './components/Pages/Profile';
+import MySubgreddiits from './components/Pages/MySubgreddiits';
+import Subgreddiits from './components/Pages/Subgreddiits';
+import Subgreddiit from './components/Pages/Subgreddiit';
 
 const form = ReactDOM.createRoot(document.getElementById('form'));
 form.render(
@@ -21,7 +21,9 @@ form.render(
           <Route path="profile" element={<Profile />} />
           <Route path="mysubgreddiits" element={<MySubgreddiits />} />
           <Route path="subgreddiits" element={<Subgreddiits />} />
-          <Route path="subgreddiit/:subgreddiitId" element={<Subgreddiit />} />
+          <Route path="subgreddiit/:subgreddiitId" element={<Subgreddiit />} >
+            <Route path="users" />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

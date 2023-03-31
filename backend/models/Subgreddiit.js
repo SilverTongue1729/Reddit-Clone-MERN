@@ -12,13 +12,14 @@ const SubgreddiitSchema = new Schema({
   bannedWords: [{ type: String }],
 
   users: [{
-    status: { type: String, enum: ['joined', 'blocked', 'requested', 'moderator'], default: 'requested' },
+    status: { type: String, enum: ['joined', 'blocked', 'banned', 'requested', 'moderator'], default: 'requested' },
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     date: { type: Date, default: Date.now }
   }],
   posts: [{
     postId: { type: Schema.Types.ObjectId, ref: 'Post' },
   }],
+  deleted: { type: Number, default: 0 },
   reports: [{
     reportId: { type: Schema.Types.ObjectId, ref: 'Report' },
   }]

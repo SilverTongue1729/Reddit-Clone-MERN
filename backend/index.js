@@ -7,6 +7,7 @@ import userRoutes from './routes/user.js';
 import followingRoutes from './routes/following.js';
 import followerRoutes from './routes/follower.js';
 import subgreddiitRoutes from './routes/subgreddiit.js';
+import postRoutes from './routes/post.js';
 
 const app = express();
 app.use(express.json());
@@ -18,9 +19,10 @@ app.use('/api/user', userRoutes);
 app.use('/api/following', followingRoutes);
 app.use('/api/follower', followerRoutes);
 app.use('/api/subgreddiit', subgreddiitRoutes);
+app.use('/api/post', postRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('Hello World!');
 });
 
 const PORT = process.env.PORT || 8000;

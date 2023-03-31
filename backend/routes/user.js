@@ -26,6 +26,21 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+router.get('/one/:id', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      console.log('User not found')
+      return res.status(404).json({ msg: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
 /**
  * @route POST api/user/edit
  * @desc Edit user

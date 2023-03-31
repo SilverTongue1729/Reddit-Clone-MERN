@@ -12,11 +12,10 @@ const PostSchema = new Schema({
   }],
   date: { type: Date, default: Date.now },
   status: { type: String, enum: ['visible', 'reported_sometime'], required: true, default: 'visible' },
-  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-  savedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  deleted: { type: Number, default: 0 },
+  comments: [{ commentId: { type: Schema.Types.ObjectId, ref: 'Comment' } }],
+  savedBy: [{ userId: { type: Schema.Types.ObjectId, ref: 'User' } }],
 });
 
 const Post = mongoose.model('Post', PostSchema);
 
-export default Post;
+export default Post;  

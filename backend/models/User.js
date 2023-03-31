@@ -13,19 +13,18 @@ const userSchema = new Schema({
   contactNo: { type: String, required: true },
   password: { type: String, required: true },
 
-  savedPosts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+  savedPosts: [{ postId: { type: Schema.Types.ObjectId, ref: 'Post' } }],
   followers: [{
-    userid: {type: Schema.Types.ObjectId, ref: 'User'},
-    userName: { type: String, required: true}
+    userid: { type: Schema.Types.ObjectId, ref: 'User' },
+    userName: { type: String, required: true }
   }],
   following: [{
     userid: { type: Schema.Types.ObjectId, ref: 'User' },
     userName: { type: String, required: true }
   }],
   subgreddiits: [{
-    status: { type: String, enum: ['joined', 'blocked', 'requested','moderator'], default: 'requested' },
+    status: { type: String, enum: ['joined', 'blocked', 'banned', 'requested', 'moderator'], default: 'requested' },
     subgreddiitId: { type: Schema.Types.ObjectId, ref: 'Subgreddiit' },
-    date: { type: Date }
   }],
 }, {
   methods: {
@@ -33,23 +32,14 @@ const userSchema = new Schema({
       return bcrypt.compare(password, this.password);
     },
     genToken () {
-      return jwt.sign({ user: { id: this._id } }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE,
+      // return jwt.sign({ user: { id: this._id } }, process.env.JWT_SECRET, {
+      return jwt.sign({ user: { id: this._id } }, "admin", {
+        // expiresIn: process.env.JWT_EXPIRE,
+        expiresIn: "30d",
       });
     }
   }
 });
-
-
-// userSchema.methods.checkPassword = function (password) {
-//   return bcrypt.compare(password, this.password);
-// };
-
-// userSchema.methods.genToken = function () {
-//   return jwt.sign({ user: { id: this._id } }, process.env.JWT_SECRET, {
-//     expiresIn: process.env.JWT_EXPIRE,
-//   });
-// };
 
 const User = mongoose.model("User", userSchema);
 

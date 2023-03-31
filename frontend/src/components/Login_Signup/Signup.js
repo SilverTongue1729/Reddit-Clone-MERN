@@ -65,6 +65,7 @@ export default function Signup () {
       localStorage.setItem("isAuthenticated", "true");
       console.log("authToken", response.data.token);
       axios.defaults.headers.common['x-auth-token'] = response.data.token;
+      api.defaults.headers.common['x-auth-token'] = response.data.token;
 
       // const redirect = location.state?.from.pathname || '/';
       // navigate(redirect);

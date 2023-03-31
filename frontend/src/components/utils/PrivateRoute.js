@@ -19,5 +19,5 @@ export default function PrivateRoute ({ children }) {
 
   if (loading) return <h1>Loading</h1>;
 
-  return children;
+  return <navbar>{children}</navbar>;
 }

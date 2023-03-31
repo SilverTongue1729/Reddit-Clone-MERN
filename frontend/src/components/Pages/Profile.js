@@ -9,12 +9,7 @@ const Profile = () => {
   const [user, setUser] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    userName: '',
-    age: '',
-    contactNo: '',
+    firstName: '', lastName: '', email: '', userName: '', age: '', contactNo: ''
   });
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState(false);
@@ -40,14 +35,6 @@ const Profile = () => {
     });
   }, [user]);
 
-
-  const styles = {
-    // color: 'red',
-    borderColor: "red",
-    // backgroundColor: 'blue',
-    // fontSize: '24px'
-  };
-
   const handleInputChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -65,13 +52,11 @@ const Profile = () => {
         setEditMode(false);
         setError(true);
         setErrors(err.response.data.errors)
-        // setEditMode(true);
-        // renderErrors();
       });
   };
 
   const renderProfile = () => (
-    <div className="profile-container" style={styles}>
+    <div className="profile-container">
       <p>First Name: {user.firstName}</p>
       <p>Last Name: {user.lastName}</p>
       <p>Email: {user.email}</p>
@@ -79,9 +64,6 @@ const Profile = () => {
       <p>Age: {user.age}</p>
       <p>Contact Number: {user.contactNo}</p>
       <button className='edit-button' onClick={() => setEditMode(true)}>Edit Profile</button>
-      {/* {errors.map(error => (
-        <p key={error.param} className="error">{error.msg}</p>
-      ))} */}
       {error ? <p className="error">Error: Invalid Input</p> : null}
     </div>
   );
@@ -156,7 +138,7 @@ const Profile = () => {
         setError(true);
       });
   }
-  
+
   const removeFollowing = async (following) => {
     console.log("remove following", following);
     await api.post('/api/following/remove/' + following.userid)
@@ -170,9 +152,6 @@ const Profile = () => {
       });
   }
 
-  // write a function renderFollowDisplay which if followdisplay==="followers" displays all the followers of user
-  // if followdisplay==="following" displays all the following of user
-  // if followdisplay==="none" displays nothing
   const renderFollowDisplay = () => {
     if (followdisplay === "followers" && user.followers) {
       return (
@@ -192,7 +171,7 @@ const Profile = () => {
           <h2>Following</h2>
           {user.following.map(following => (
             <div key={following._id}>
-              <p>{following.userName} </p> <button onClick={() => removeFollowing(following)}>Remove</button>
+              <p>{following.userName} </p> <button onClick={() => removeFollowing(following)}>Unfollow</button>
             </div>
           ))}
         </div>
@@ -203,9 +182,8 @@ const Profile = () => {
     }
   }
 
-
   return (<>
-    <div className="profile-container" style={styles}>
+    <div className="profile-container">
       {editMode ? renderEditForm() : renderProfile()}
       {renderFollow()}
       {renderFollowDisplay()}

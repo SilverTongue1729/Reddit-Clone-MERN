@@ -1,35 +1,16 @@
 import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import PersonIcon from '@mui/icons-material/Person';
-import LogoutIcon from '@mui/icons-material/Logout';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import RedditIcon from '@mui/icons-material/Reddit';
-import FolderSharedIcon from '@mui/icons-material/FolderShared';
-
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import api from '../../api/api';
 
-// import Profile from './Profile';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box, Container, Grid, CssBaseline } from '@mui/material';
+import { AppBar as MuiAppBar, Drawer as MuiDrawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, Divider, } from '@mui/material';
+import { Logout as LogoutIcon, Bookmark, ChevronLeft, FolderShared, Menu, People, Person, Reddit, PersonAdd, BarChart, Flag, } from '@mui/icons-material';
+
 import Greddiit_Logo from '../../images/Greddiit_Logo_1.jpg';
-import Profile from '../Profile/Profile';
 import PrivateRoute from './PrivateRoute';
-import Reddit from '@mui/icons-material/Reddit';
+
 
 const drawerWidth = 240;
 
@@ -92,9 +73,10 @@ function DashboardContent () {
 
   const Logout = () => {
     console.log('logout');
-    localStorage.removeItem('authToken');
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('authToken');
     delete axios.defaults.headers.common['x-auth-token'];
+    delete api.defaults.headers.common['x-auth-token'];
     navigate('/loginsignup');
   }
 
@@ -123,7 +105,7 @@ function DashboardContent () {
                     ...(open && { display: 'none' }),
                   }}
                 >
-                  <MenuIcon />
+                  <Menu />
                 </IconButton>
                 <img src={Greddiit_Logo} alt="Greddiit Logo" height={35} width={35} />
                 <Typography
@@ -146,7 +128,7 @@ function DashboardContent () {
                 }}
               >
                 <IconButton onClick={toggleDrawer}>
-                  <ChevronLeftIcon />
+                  <ChevronLeft />
                 </IconButton>
               </Toolbar>
               <Divider />
@@ -156,61 +138,63 @@ function DashboardContent () {
                 {/* <ListItemButton onClick={NavigateToProfile}> */}
                 <ListItemButton onClick={() => navigate('/profile')}>
                   <ListItemIcon>
-                    <PersonIcon />
+                    <Person />
                   </ListItemIcon>
                   <ListItemText primary="Profile" />
                 </ListItemButton>
 
                 <ListItemButton onClick={() => navigate('/mysubgreddiits')}>
                   <ListItemIcon>
-                    <FolderSharedIcon />
+                    <FolderShared />
                   </ListItemIcon>
                   <ListItemText primary="My SubGreddiits" />
                 </ListItemButton>
 
                 <ListItemButton onClick={() => navigate('/subgreddiits')}>
                   <ListItemIcon>
-                    <RedditIcon />
+                    <Reddit />
                   </ListItemIcon>
                   <ListItemText primary="SubGreddiits" />
                 </ListItemButton>
 
                 <ListItemButton onClick={() => navigate('/savedposts')}>
                   <ListItemIcon>
-                    <BookmarkIcon />
+                    <Bookmark />
                   </ListItemIcon>
                   <ListItemText primary="Saved Posts" />
                 </ListItemButton>
 
                 {isSubGreddiit &&
-                  <ListItemButton onClick={() => (null)}>
-                    <ListItemIcon>
-                      <BookmarkIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Users" />
-                  </ListItemButton>
-                  &&
-                  <ListItemButton onClick={() => (null)}>
-                    <ListItemIcon>
-                      <BookmarkIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Joining Requests" />
-                  </ListItemButton>
-                  &&
-                  <ListItemButton onClick={() => (null)}>
-                    <ListItemIcon>
-                      <BookmarkIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Stats" />
-                  </ListItemButton>
-                  &&
-                  <ListItemButton onClick={() => (null)}>
-                    <ListItemIcon>
-                      <BookmarkIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Reported" />
-                  </ListItemButton>
+                  <>
+                    <Divider />
+                    <ListItemButton onClick={() => (null)}>
+                      <ListItemIcon>
+                        <People />
+                      </ListItemIcon>
+                      <ListItemText primary="Users" />
+                    </ListItemButton>
 
+                    <ListItemButton onClick={() => (null)}>
+                      <ListItemIcon>
+                        <PersonAdd />
+                      </ListItemIcon>
+                      <ListItemText primary="Joining Requests" />
+                    </ListItemButton>
+
+                    <ListItemButton onClick={() => (null)}>
+                      <ListItemIcon>
+                        <BarChart />
+                      </ListItemIcon>
+                      <ListItemText primary="Stats" />
+                    </ListItemButton>
+
+                    <ListItemButton onClick={() => (null)}>
+                      <ListItemIcon>
+                        <Flag />
+                      </ListItemIcon>
+                      <ListItemText primary="Reports" />
+                    </ListItemButton>
+                  </>
                 }
 
                 <ListItemButton onClick={Logout}>

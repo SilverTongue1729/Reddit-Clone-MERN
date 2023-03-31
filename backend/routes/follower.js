@@ -1,13 +1,16 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
 import User from '../models/User.js';
 import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
+/**
+ * @route GET api/follower/remove/:id
+ * @desc Get follower
+ * @access Private
+ * @returns {follower}
+ */
 router.post('/remove/:id', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -27,6 +30,13 @@ router.post('/remove/:id', auth, async (req, res) => {
       user.followers.splice(index, 1);
     }
     await user.save();
+    
+    // remove this user from follower's following list
+    const index2 = follower.following.findIndex(following => following.userid == req.user.id);
+    if (index2 > -1) {
+      follower.following.splice(index2, 1);
+    }
+    await follower.save();
     
     res.status(200).json(user);
     

@@ -11,8 +11,8 @@ const MySubgreddiits = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    tags: [],
-    bannedWords: [],
+    tags: '',
+    bannedWords: '',
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -20,7 +20,7 @@ const MySubgreddiits = () => {
   useEffect(() => {
     const fetchSubgreddiits = async () => {
       try {
-        const response = await api.get('/api/subgreddiit/list');
+        const response = await api.get('/api/subgreddiit/list/my');
         setSubgreddiits(response.data);
       } catch (error) {
         console.error(error);
@@ -66,11 +66,11 @@ const MySubgreddiits = () => {
         </div>
         <div>
           <label htmlFor="tags">Tags (separated by commas):</label>
-          <input type="text" id="tags" value={formData.tags.join(', ')} onChange={(event) => setFormData({ ...formData, tags: event.target.value.split(', ') })} />
+          <input type="text" id="tags" value={formData.tags} onChange={(event) => setFormData({ ...formData, tags: event.target.value })} />
         </div>
         <div>
           <label htmlFor="bannedWords">Banned Words (separated by commas):</label>
-          <input type="text" id="bannedWords" value={formData.bannedWords.join(', ')} onChange={(event) => setFormData({ ...formData, bannedWords: event.target.value.split(', ') })} />
+          <input type="text" id="bannedWords" value={formData.bannedWords} onChange={(event) => setFormData({ ...formData, bannedWords: event.target.value })} />
         </div>
         <button type="submit">Create</button>
       </form>
@@ -84,9 +84,7 @@ const MySubgreddiits = () => {
         <p>{subgreddiit.description}</p>
         <p>Banned words: {subgreddiit.bannedWords.join(', ')}</p>
         <p>Number of posts: {subgreddiit.posts.length}</p>
-        <p>
-          Number of users: {subgreddiit.users.filter(user => user.status === 'joined' || user.status === 'moderator').length}
-        </p>
+        <p>Number of users: {subgreddiit.users.filter(user => user.status === 'joined' || user.status === 'moderator').length}</p>
         <button onClick={() => handleDelete(subgreddiit._id)}>Delete</button>
         <button onClick={() => navigate('/subgreddiit/' + subgreddiit._id)}>Open</button>
       </div>
@@ -98,7 +96,6 @@ const MySubgreddiits = () => {
       <div>
         {editMode ? renderForm() : <button onClick={() => setEditMode(true)}>Create Subgreddiit</button>}
       </div>
-
       <div style={{ margin: 30 }}>
         <h2>My Subgreddiits</h2>
         {renderSubgreddiits()}

@@ -28,7 +28,14 @@ router.post('/remove/:id', auth, async (req, res) => {
       user.following.splice(index, 1);
     }
     await user.save();
-
+    
+    // remove this user from following's followers list
+    const index2 = following.followers.findIndex(follower => follower.userid == req.user.id);
+    if (index2 > -1) {
+      following.followers.splice(index2, 1);
+    }
+    await following.save();
+    
     res.status(200).json(user);
 
   } catch (err) {

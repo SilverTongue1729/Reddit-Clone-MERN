@@ -13,4 +13,5 @@ A Reddit Clone in the MERN stack.
 - run `npm i` in the frontend and backend folders
 - run `npm start` in the both the frontend and backend folders
 - open `localhost:3000` and the website should be visible
-- will add Dockerfile
+
+changed from .env to hardcoded string in `connectDB.js`, `auth.js`, `User.js` in models
