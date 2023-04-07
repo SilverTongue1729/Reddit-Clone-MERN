@@ -1,4 +1,4 @@
-Reddit-Clone-MERN
+# Greddiit - Reddit Clone in MERN
 
 Assignment 1 - **CS6.301** Design and Analysis of Software Systems (*DASS*)  
 Spring 2023 - IIIT Hyderabad  
